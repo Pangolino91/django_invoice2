@@ -1,0 +1,46 @@
+{% extends "../index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>New Invoice</h1>
+    <form action="" method="post">{% csrf_token %}
+    {% comment %} {{ invoice_form|crispy }} {% endcomment %}
+    <div class="row">
+        <div class="col-6">
+            {{ invoice_form.clientName|as_crispy_field }}
+        </div>
+        <div class="col-6">
+            {{ invoice_form.totalPrice|as_crispy_field }}
+        </div>
+    </div>
+    <h2>Elements</h2>
+    {{ formset|crispy }}
+    <div class="gallery"></div>
+    <div style="display: none" id="inline-additional">
+    	{{ formset.empty_form|crispy }}
+    </div>
+    <button class="btn btn-success add-element">Add Additional Form</button><br><br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script defer>
+    $(document).ready(function () {
+        // this is to add multiple forms for elements 
+        $('.add-element').click(function(ev){
+            ev.preventDefault();
+            var count = parseInt($('#id_element_set-TOTAL_FORMS').attr('value'), 10);
+            // console.log(count)
+            var tmplMarkup = $('#inline-additional').html();
+            console.log(tmplMarkup);
+            // console.log('hello')
+            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count)
+            console.log(compiledTmpl);
+            $('div.gallery').append(compiledTmpl);
+            $('#id_element_set-TOTAL_FORMS').attr('value', count + 1);
+        });
+    });
+</script>
+{% endblock  %}

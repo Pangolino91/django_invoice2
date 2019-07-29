@@ -1,0 +1,45 @@
+{% extends "../index.html" %}
+
+
+{% block content %}
+<h1>Single Invoice Display #{{ invoice.id }}</h1>
+<br>
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Date</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">{{ invoice.clientName }}</td>
+                    <td>{{ invoice.date }}</td>
+                    <td>{{ invoice.totalPrice }} €</td>
+                </tr>
+            </tbody>
+    </table>
+    <br>
+    <br>
+    <h3>Invoice elements</h3>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Element number</th>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        {% for element in invoice.element_set.all %}
+            <tbody>
+                <tr>
+                    <td>{{ element.id }}</td>
+                    <td>{{ element.name }}</td>
+                    <td>{{ element.price }} €</td>
+                </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

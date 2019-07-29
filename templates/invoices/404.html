@@ -1,0 +1,10 @@
+{% extends "../index.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div>
+        <h2>404</h2>
+        <h3>Page not found</h3>
+        <div><a class="btn btn-info" href="{% url 'invoice-list' %}">Come Back</a></div>
+    </div>
+{% endblock %}

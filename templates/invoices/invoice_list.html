@@ -1,0 +1,72 @@
+{% extends "../index.html" %}
+
+
+{% block content %}
+<div class="d-flex bd-highlight mb-3">
+    <div class="p-2 bd-highlight"><h2>Invoice List</h2></div>
+    <div class="ml-auto p-2 bd-highlight">
+        <h2>
+            <a href="{% url 'add-elements' %}" class="btn btn-primary">NEW INVOICE<a>
+        </h2>
+    </div>
+</div>
+<table class="table">
+<thead>
+    <tr>
+    <th scope="col">#</th>
+    <th scope="col">Date</th>
+    <th scope="col">Client</th>
+    <th scope="col">Total</th>
+    <th scope="col">Details</th>
+    <th scope="col">Update</th>
+    <th scope="col">Save PDF</th>
+    <th scope="col">Delete</th>
+    </tr>
+</thead>
+<tbody>
+    {% for invoice in invoice_list %}
+        <tr>
+        <th scope="row">{{ invoice.id }}</th>
+        <td>{{ invoice.date }}</td>
+        <td>{{ invoice.clientName }}</td>
+        <td>{{ invoice.totalPrice }} €</td>
+        <td><a class="btn btn-info" href="{% url 'single-invoice' invoice.id %}">GO</a></td>
+        <td><a class="btn btn-warning" href="{% url 'update-element' invoice.id %}">UPDATE</a></td>
+        <td><a class="btn btn-success" href="{% url 'print-pdf' invoice.id %}">SAVE</a></td>
+        <td><a class="btn btn-danger" href="{% url 'delete-invoice' invoice.id %}">DELETE</a></td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+{% if is_paginated %}
+<ul class="pagination">
+{% if page_obj.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
+{% endif %}
+    {% for page_number in paginator.page_range  %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a></li>
+    {% endfor %}
+{% if page_obj.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+{% endif %}
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {% comment %} Highlight current page {% endcomment %}
+    <script>
+        $(document).ready(function () {            
+            function getSecondPart(str) {
+                return str.split('=')[1];
+            }
+            var pageNumber = getSecondPart(window.location.search);
+            $(".page-link:contains('" + pageNumber + "')").css('background-color', '#B2E4EC');
+        });
+    </script>
+{% endblock  %}

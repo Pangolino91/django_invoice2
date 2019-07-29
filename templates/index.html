@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Content Wrapper -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'index' %}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'invoice-list' %}">Invoice List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'add-elements' %}">New Invoice</a>
+            </li>
+            </form>
+        </div>
+        </nav>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+    {% block content %}
+    <div class="jumbotron">
+    <h1 class="display-4">Simple Invoice App</h1>
+    <p class="lead">Basic application to create, store, download and send invoices</p>
+    </div>
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-6">
+                <h2>
+                    <a href="{% url 'add-elements' %}" class="btn btn-primary">NEW INVOICE<a>
+                </h2>
+            </div>
+            <div class="col-6">
+                <h2>
+                    <a href="{% url 'invoice-list' %}" class="btn btn-success">INVOICE LIST<a>
+                </h2>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    </div>
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Enrico Cerri</span>
+        </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+    <script src="{% static 'dist/app.bundle.js' %}"></script>
+    {% block scripts %}    
+    {% endblock  %}
+</body>
+</html>
