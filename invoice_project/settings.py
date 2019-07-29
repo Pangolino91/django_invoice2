@@ -148,3 +148,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # login redirect
 
 LOGIN_REDIRECT_URL = '/invoices/list'
+
+# installing pipenv in same folder
+PIPENV_VENV_IN_PROJECT=True

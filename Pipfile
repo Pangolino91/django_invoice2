@@ -1,0 +1,29 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+django = "*"
+mysql = "*"
+ipython = "*"
+django-webpack = "*"
+django-webpack-loader = "*"
+django-livereload-server = "*"
+pylint = "*"
+reportlab = "*"
+weasyprint = "*"
+xhtml2pdf = "*"
+django-wkhtmltopdf = "*"
+djangorestframework = "*"
+markdown = "*"
+django-crispy-forms = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
