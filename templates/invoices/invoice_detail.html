@@ -32,7 +32,7 @@
                 <th>Price</th>
             </tr>
         </thead>
-        {% for element in invoice.element_set.all %}
+        {% for element in invoice.elements.all %}
             <tbody>
                 <tr>
                     <td>{{ element.id }}</td>

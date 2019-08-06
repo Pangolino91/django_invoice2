@@ -1,4 +1,5 @@
 {% extends "../index.html" %}
+{% load crispy_forms_tags %}
 
 
 {% block content %}
@@ -11,7 +12,7 @@
         <p>Your account doesn't have access to this page. To proceed,
         please login with an account that has access.</p>
         {% else %}
-        <p>Please login to see this page.</p>
+        <p style="list-style: none" class="alert alert-info">Please login to see this page.</p>
         {% endif %}
     {% endif %}
 
@@ -20,16 +21,17 @@
     {% csrf_token %}
     <table>
     <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
+        {{ form.username|as_crispy_field }}
     </tr>
     <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
+        {{ form.password|as_crispy_field }}
     </tr>
     </table>
-
-    <input type="submit" value="login">
+    <input class="btn btn-primary" type="submit" value="login">
     <input type="hidden" name="next" value="{{ next }}">
     </form>
+    <div>
+        <p>You are not registered?</p>
+        <a class="btn btn-info" href="{% url 'register' %}">SIGN UP</a>
+    </div>
 {% endblock %}

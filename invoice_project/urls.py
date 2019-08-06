@@ -18,7 +18,6 @@ from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from . import views
 from invoices.models import Invoice
-from invoices.models import Invoice
 from rest_framework import routers, serializers, viewsets
 from django.contrib.auth import views as auth_views
 
@@ -38,14 +37,18 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 # router = routers.DefaultRouter()
 # router.register('api-invoices', InvoiceViewSet)
 
+app_name = 'root_app'
 urlpatterns = [
     path('', views.index, name="index"),
-    # path('login/<int:id>', views.testauth, name="testauth"),
-    path('login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name="login"),
+    path('login/', views.CustomLoginView.as_view(), name="login"),
+    # path('register/', views.user_creation, name="register"),
+    path('register/', views.UserCreation.as_view(), name="register"),
+    # path('login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name="login"),
+    path('logout/', auth_views.LogoutView.as_view(extra_context={ 'message': 'you have successfully logged out'}), name="logout"),
     path('admin/', admin.site.urls),
-    path('invoices/', include('invoices.urls')),
+    path('invoices/', include('invoices.urls', namespace='invoices')),
+    path('clients/', include('clients.urls', namespace='clients')),
     path('auth/', include('auth.urls')),
-    path('pages/', include('pages.urls')),
     # path('api/', include(router.urls))
 ]
 

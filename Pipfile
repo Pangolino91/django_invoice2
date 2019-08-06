@@ -21,6 +21,7 @@ django-wkhtmltopdf = "*"
 djangorestframework = "*"
 markdown = "*"
 django-crispy-forms = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.7"

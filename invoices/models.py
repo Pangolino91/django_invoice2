@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from clients.models import Client
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Invoice(models.Model):
@@ -13,17 +15,36 @@ class Invoice(models.Model):
     def get_absolute_url(self):
         return reverse("invoice-list")
     
-    # title = models.CharField(max_length=100, blank=False, null=False)
+    @property
+    def total(self):
+        tot = 0
+        for el in self.elements.all():
+            tot += el.price
+        return tot
+    
     date = models.DateField(auto_now_add=True)
     clientName = models.CharField(max_length=100, blank=False, null=False)
-    totalPrice = models.IntegerField(blank=False)
-    # clientAddress = models.CharField(max_length=100, blank=False, null=False)
-    # clientCity = models.CharField(max_length=100, blank=False, null=False)
-    # clientZip = models.CharField(max_length=100, blank=False, null=False)
-    # clientCountry = models.CharField(max_length=100)
-    # clientVat = models.CharField(max_length=100, blank=False, null=False)
-    # tax = models.FloatField()
-    # additionalNotes = models.TextField(max_length=100)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='clients')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
+
+    def clean(self):
+        super().clean()
+        # from django.utils import timezone
+        from django.core.validators import ValidationError
+
+        if self.clientName == "Adam":
+            raise ValidationError({"clientName": "Adam cannot  get an invoice!"})
+
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        # Pre-save
+        super().save(*args, **kwargs)
+        # Post-save
+
+    @property
+    def price_date(self):
+        return "{} - {}".format(self.total, self.date)
 
 class Element(models.Model):
 
@@ -34,12 +55,9 @@ class Element(models.Model):
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse("")
     name = models.CharField(max_length=200, blank=False, null=False)
-    # quantity = models.IntegerField()
     price = models.IntegerField()
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="elements")
 
 
 

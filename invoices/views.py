@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+from django.contrib import messages
 from django.http import HttpResponse, FileResponse, HttpResponseRedirect, Http404
 from django.template import Context
 from .forms import InvoiceForm, InvoiceFormset, InlineElementFormset, ElementForm
@@ -25,21 +26,14 @@ class InvoiceList(ListView):
     ordering = ['date']
     paginate_by = 10
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data()
-        invoice_list = Invoice.objects.all()
-        paginator = Paginator(invoice_list, self.paginate_by)
+    def get_queryset(self):
+        current_user = self.request.user
+        queryset = current_user.invoices.all()
+        return queryset
 
-        page = self.request.GET.get('page')
-
-        try:
-            file_invoice = paginator.page(page)
-        except PageNotAnInteger:
-            file_invoice = paginator.page(1)
-        except EmptyPage:
-            file_invoice = paginator.page(paginator.num_pages)
-
-        context['file_invoice'] = file_invoice
+    def get_context_data(self, **kwargs):
+        context = {'ciao': 'signore'}
+        context = super().get_context_data(**context)
         return context
 
 # Single invoice View
@@ -48,10 +42,19 @@ class InvoiceDetailView(DetailView):
 
     model = Invoice
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["users"] = User.objects.all()
+        return context
+    
+    
+    
+
 # create new invoice and related elements
 
 def inline_formset(request):
     invoice = Invoice()
+    user = request.user
     invoice_form = InvoiceForm(instance=invoice)
     if request.method == 'POST':
         invoice_form = InvoiceForm(request.POST)
@@ -60,11 +63,14 @@ def inline_formset(request):
             created_invoice = invoice_form.save(commit=False)
             formset = InlineElementFormset(request.POST, instance=created_invoice)
             if formset.is_valid():
-                print(formset.cleaned_data)
+                # print(formset.cleaned_data)
                 print(invoice_form.cleaned_data)
+                invoice_form.clean()
+                created_invoice.user = user
                 created_invoice.save()
                 formset.save()
-                return HttpResponseRedirect(reverse('invoice-list'))
+                messages.success(request, 'Invoice created successfully.')
+                return HttpResponseRedirect(reverse('invoices:invoice-list'))
     else:
         invoice_form = InvoiceForm(instance=invoice)
         formset = InlineElementFormset()
@@ -77,7 +83,7 @@ def inline_formset(request):
 
 def update_formset(request, id):
     invoice = Invoice.objects.get(id=id)
-    elements = invoice.element_set.all
+    elements = invoice.elements.all()
     invoice_form = InvoiceForm(instance=invoice)
     if request.method == 'POST':
         invoice_form = InvoiceForm(request.POST, instance=invoice)
@@ -90,7 +96,7 @@ def update_formset(request, id):
                 print(invoice_form.cleaned_data)
                 created_invoice.save()
                 formset.save()
-                return HttpResponseRedirect(reverse('invoice-list'))
+                return HttpResponseRedirect(reverse('invoices:invoice-list'))
     else:
         invoice_form = InvoiceForm(instance=invoice)
         formset = InlineElementFormset(instance=invoice)
@@ -136,6 +142,14 @@ def error_404_view(request, exception):
 #     return render(request, 'invoices/addelement.html', {'form': form})
 
 # start pdf drawing
+
+# class testView(View):
+#     testattribute = 'test attribute'
+
+#     def get(self, *args, **kwargs):
+        
+
+
 
 # @staff_member_required
 def test_pdf(request, id=None):

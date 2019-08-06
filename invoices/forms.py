@@ -1,19 +1,28 @@
-from .models import Element, Invoice
+from .models import Element, Invoice, Client
 from django import forms
 from django.forms import inlineformset_factory, formset_factory, modelformset_factory, BaseModelFormSet, modelform_factory, ModelForm, BaseInlineFormSet, Form
 
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ['clientName', 'totalPrice']
+        fields = ['clientName', 'client']
 
-# class  BaseInvoiceFormset(BaseModelFormSet):
-#     class Meta:
-#         pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['client'] = forms.ModelChoiceField(queryset=Client.objects.all())
+        
+    def clean(self):
+        super().clean()
+        print(self)
+        from django.core.validators import ValidationError
+
+        if self.cleaned_data['client'].name == 'Trollino':
+            raise ValidationError({"clientName": "Trollino cannot get an invoice!"})
+        
 
 InvoiceFormset = modelformset_factory(
     Invoice, 
-    fields=('clientName', 'totalPrice'), 
+    fields=('clientName',), 
     extra=1
     ) 
 

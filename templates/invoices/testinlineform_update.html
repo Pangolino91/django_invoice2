@@ -10,9 +10,6 @@
         <div class="col-6">
             {{ invoice_form.clientName|as_crispy_field }}
         </div>
-        <div class="col-6">
-            {{ invoice_form.totalPrice|as_crispy_field }}
-        </div>
     </div>
     <h2>Elements</h2>
     {{ formset|crispy }}
@@ -26,7 +23,7 @@
 {% endblock %}
 
 {% block scripts %}
-{% comment %} <script defer>
+<script defer>
     $(document).ready(function () {
         // this is to add multiple forms for elements 
         $('.add-element').click(function(ev){
@@ -42,5 +39,5 @@
             $('#id_element_set-TOTAL_FORMS').attr('value', count + 1);
         });
     });
-</script> {% endcomment %}
+</script>
 {% endblock  %}

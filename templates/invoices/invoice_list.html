@@ -6,7 +6,7 @@
     <div class="p-2 bd-highlight"><h2>Invoice List</h2></div>
     <div class="ml-auto p-2 bd-highlight">
         <h2>
-            <a href="{% url 'add-elements' %}" class="btn btn-primary">NEW INVOICE<a>
+            <a href="{% url 'invoices:add-elements' %}" class="btn btn-primary">NEW INVOICE<a>
         </h2>
     </div>
 </div>
@@ -29,11 +29,12 @@
         <th scope="row">{{ invoice.id }}</th>
         <td>{{ invoice.date }}</td>
         <td>{{ invoice.clientName }}</td>
-        <td>{{ invoice.totalPrice }} €</td>
-        <td><a class="btn btn-info" href="{% url 'single-invoice' invoice.id %}">GO</a></td>
-        <td><a class="btn btn-warning" href="{% url 'update-element' invoice.id %}">UPDATE</a></td>
-        <td><a class="btn btn-success" href="{% url 'print-pdf' invoice.id %}">SAVE</a></td>
-        <td><a class="btn btn-danger" href="{% url 'delete-invoice' invoice.id %}">DELETE</a></td>
+        <td>{{ invoice.total }} €</td>
+        <td>{{ invoice.price_date }}</td>
+        <td><a class="btn btn-info" href="{% url 'invoices:single-invoice' invoice.id %}">GO</a></td>
+        <td><a class="btn btn-warning" href="{% url 'invoices:update-element' invoice.id %}">UPDATE</a></td>
+        <td><a class="btn btn-success" href="{% url 'invoices:print-pdf' invoice.id %}">SAVE</a></td>
+        <td><a class="btn btn-danger" href="{% url 'invoices:delete-invoice' invoice.id %}">DELETE</a></td>
         </tr>
     {% endfor %}
 </tbody>

@@ -43,22 +43,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'livereload',
-    'pages',
     'invoices',
+    'clients',
     'crispy_forms',
     'rest_framework'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livereload.middleware.LiveReloadScript',
+    # 'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'invoice_project.urls'
@@ -145,9 +145,17 @@ WKHTMLTOPDF_CMD = 'C:/Users/Enrico/Desktop/path_utils/htmltool/wkhtmltopdf.exe'
 # Crispy package
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# login url
+
+LOGIN_URL = '/login'
+
 # login redirect
 
 LOGIN_REDIRECT_URL = '/invoices/list'
+
+# logout redirect
+
+LOGOUT_REDIRECT_URL = '/'
 
 # installing pipenv in same folder
 # PIPENV_VENV_IN_PROJECT=True
