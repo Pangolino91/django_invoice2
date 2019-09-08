@@ -10,7 +10,7 @@ class Invoice(models.Model):
         verbose_name_plural = "invoices"
 
     def __str__(self):
-        return  f"{str(self.date)}-{self.clientName}"
+        return  f"{str(self.date)}-{self.client.name}"
 
     def get_absolute_url(self):
         return reverse("invoice-list")
@@ -23,7 +23,6 @@ class Invoice(models.Model):
         return tot
     
     date = models.DateField(auto_now_add=True)
-    clientName = models.CharField(max_length=100, blank=False, null=False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='clients')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
 
@@ -32,8 +31,8 @@ class Invoice(models.Model):
         # from django.utils import timezone
         from django.core.validators import ValidationError
 
-        if self.clientName == "Adam":
-            raise ValidationError({"clientName": "Adam cannot  get an invoice!"})
+        # if self.clientName == "Adam":
+        #     raise ValidationError({"clientName": "Adam cannot  get an invoice!"})
 
 
     def save(self, *args, **kwargs):

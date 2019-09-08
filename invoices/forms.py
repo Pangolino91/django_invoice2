@@ -5,7 +5,7 @@ from django.forms import inlineformset_factory, formset_factory, modelformset_fa
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ['clientName', 'client']
+        fields = ['client']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -16,13 +16,11 @@ class InvoiceForm(ModelForm):
         print(self)
         from django.core.validators import ValidationError
 
-        if self.cleaned_data['client'].name == 'Trollino':
-            raise ValidationError({"clientName": "Trollino cannot get an invoice!"})
         
 
 InvoiceFormset = modelformset_factory(
     Invoice, 
-    fields=('clientName',), 
+    fields=('client',), 
     extra=1
     ) 
 

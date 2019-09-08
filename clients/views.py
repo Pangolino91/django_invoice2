@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.detail import DetailView
 from django.contrib import messages
 from django.views.generic.list import ListView
-from .urls import *
+# from .urls import *
 
 # Create your views here.
 
@@ -19,13 +19,13 @@ class ClientCreate(CreateView):
     success_url = reverse_lazy("clients:list-client")
     #  begin experiment
 
-    def testing_related_actions(self):
-        self.addingshit = 'shit added'
-        print(self.addingshit)
+    # def testing_related_actions(self):
+    #     self.addingshit = 'shit added'
+    #     print(self.addingshit)
     
     def post(self, request, *args, **kwargs):
-        messages.success(self.request, 'HELLOOOO')
-        self.testing_related_actions()
+        messages.success(self.request, 'Client created successfully')
+        # self.testing_related_actions()
         return super().post(request, *args, **kwargs)
 
 

@@ -57,7 +57,7 @@ class MyPrint:
         # for i, invoice in enumerate(invoices):
         tbl_data = [
             [
-                Paragraph(f"<b>Client:</b> {str(invoice.clientName)}", styles['Normal']),
+                Paragraph(f"<b>Client:</b> {str(invoice.client.name)}", styles['Normal']),
                 Paragraph(f"<b>Date:</b> {str(invoice.date)}", styles['Normal'])
             ],
         ]
@@ -67,7 +67,7 @@ class MyPrint:
         # elements.append(Paragraph(f"<b>Date:</b> {str(invoice.date)}", styles['Enhanced-right']))
         elements.append(Paragraph(str('elements'), styles['Heading2']))
         # testing
-        for element in invoice.element_set.all():
+        for element in invoice.elements.all():
             tbl_elements_outer = [
                 [
                     Paragraph(f"<b>Element Name:</b> {str(element.name)}", styles['Normal']),
@@ -76,7 +76,7 @@ class MyPrint:
             ]       
             tbl_table = Table(tbl_elements_outer, colWidths=[3.4*inch, 3.12*inch])
             elements.append(tbl_table)
-        elements.append(Paragraph(f"<b>Total Price:</b> {str(invoice.totalPrice)}€", styles['Heading2']))
+        elements.append(Paragraph(f"<b>Total Price:</b> {str(invoice.total)}€", styles['Heading2']))
         # for element in invoice.element_set.all():
         #     elements.append(Paragraph(str(element.name), styles['Enhanced']))
         doc.build(elements)

@@ -156,7 +156,7 @@ def test_pdf(request, id=None):
     invoice = get_object_or_404(Invoice, id=id)
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="{invoice.date}-{invoice.clientName}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="{invoice.date}-{invoice.client.name}.pdf"'
 
     buffer = io.BytesIO()
 
