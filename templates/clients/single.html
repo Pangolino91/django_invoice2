@@ -2,13 +2,13 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>New Client</h1>
+<h1>Client Details</h1>
 <div>
-    <div>{{ ciao.clientName }}</div>
-    <div>{{ merda.name }}</div>
-    <div>{{ addingInvoice.clientName }}</div>
-    <div></div>
-    <div></div>
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="btn btn-info" type="submit" value="Edit">
+    </form>
 </div>
 {% endblock %}
 

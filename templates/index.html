@@ -18,22 +18,37 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'invoices:invoice-list' %}">Invoice List</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'invoices:add-elements' %}">New Invoice</a>
-            </li>
+            <div class="dropdown show aligned-with-menu">
+            <a class="dropdown-toggle" href="#" role="" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Invoices
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'invoices:invoice-list' %}">Invoice List</a>
+                <a class="dropdown-item" href="{% url 'invoices:add-elements' %}">New Invoice</a>
+            </div>
+            </div>
+            <div class="dropdown show aligned-with-menu">
+            <a class="dropdown-toggle" href="#" role="" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Clients
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'clients:list-client' %}">Clients List</a>
+                <a class="dropdown-item" href="{% url 'clients:add-client' %}">Add Client</a>
+            </div>
+            </div>
             <div class="divider"></div>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'clients:list-client' %}">Clients List</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'clients:add-client' %}">Add Client</a>
-            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'myprofile' %}">My Profile</a>
+                </li>
+            {% endif %}
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
             </form>
@@ -53,7 +68,7 @@
     {% block content %}
     <div class="jumbotron">
     <h1 class="display-4">Simple Invoice App</h1>
-    <p class="lead">Basic application to create, store, download and send invoices</p>
+    <p class="lead">Application to create, store, download and send invoices</p>
     </div>
     <div class="jumbotron center">
         {% if user.is_authenticated %}
@@ -87,6 +102,19 @@
             <div class="col-6">
                 <h2>
                     <a href="{% url 'invoices:invoice-list' %}" class="btn btn-success">INVOICE LIST<a>
+                </h2>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="col-6">
+                <h2>
+                    <a href="{% url 'clients:add-client' %}" class="btn btn-primary">NEW CLIENT<a>
+                </h2>
+            </div>
+            <div class="col-6">
+                <h2>
+                    <a href="{% url 'clients:list-client' %}" class="btn btn-success">CLIENT LIST<a>
                 </h2>
             </div>
         </div>

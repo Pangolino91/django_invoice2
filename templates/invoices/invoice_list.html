@@ -18,9 +18,9 @@
     <th scope="col">Client</th>
     <th scope="col">Total</th>
     <th scope="col">Details</th>
-    <th scope="col">Update</th>
-    <th scope="col">Save PDF</th>
-    <th scope="col">Delete</th>
+    <th scope="col"></th>
+    <th scope="col"></th>
+    <th scope="col"></th>
     </tr>
 </thead>
 <tbody>
@@ -28,7 +28,7 @@
         <tr>
         <th scope="row">{{ invoice.id }}</th>
         <td>{{ invoice.date }}</td>
-        <td>{{ invoice.clientName }}</td>
+        <td>{{ invoice.client.name }}</td>
         <td>{{ invoice.total }} €</td>
         <td>{{ invoice.price_date }}</td>
         <td><a class="btn btn-info" href="{% url 'invoices:single-invoice' invoice.id %}">GO</a></td>

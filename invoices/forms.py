@@ -8,12 +8,13 @@ class InvoiceForm(ModelForm):
         fields = ['client']
 
     def __init__(self, *args, **kwargs):
+        userid = kwargs.pop('userid', None)
         super().__init__(*args, **kwargs)
-        self.fields['client'] = forms.ModelChoiceField(queryset=Client.objects.all())
+        self.fields['client'] = forms.ModelChoiceField(queryset=Client.objects.filter(user_id=userid))
         
     def clean(self):
         super().clean()
-        print(self)
+        # print(self)
         from django.core.validators import ValidationError
 
         
@@ -33,3 +34,6 @@ class ElementForm(ModelForm):
 
 InlineElementFormset = inlineformset_factory(Invoice, Element, fields=('name', 'price'),
 extra=1, can_delete=False)
+
+InlineElementFormsetUpdate = inlineformset_factory(Invoice, Element, fields=('name', 'price'),
+extra=0, can_delete=True)

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, FileResponse, HttpResponseRedirect, Http404
 from django.template import Context
-from .forms import InvoiceForm, InvoiceFormset, InlineElementFormset, ElementForm
+from .forms import InvoiceForm, InvoiceFormset, InlineElementFormset, ElementForm, InlineElementFormsetUpdate
 from .models import Invoice
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse_lazy, reverse
@@ -32,7 +32,7 @@ class InvoiceList(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = {'ciao': 'signore'}
+        context = {}
         context = super().get_context_data(**context)
         return context
 
@@ -55,15 +55,16 @@ class InvoiceDetailView(DetailView):
 def inline_formset(request):
     invoice = Invoice()
     user = request.user
+    user_clients = user.clients
     invoice_form = InvoiceForm(instance=invoice)
     if request.method == 'POST':
-        invoice_form = InvoiceForm(request.POST)
+        invoice_form = InvoiceForm(request.POST, userid=user.id)
         formset = InlineElementFormset(request.POST)
         if invoice_form.is_valid():
             created_invoice = invoice_form.save(commit=False)
             formset = InlineElementFormset(request.POST, instance=created_invoice)
             if formset.is_valid():
-                # print(formset.cleaned_data)
+                print(formset.cleaned_data)
                 print(invoice_form.cleaned_data)
                 invoice_form.clean()
                 created_invoice.user = user
@@ -72,34 +73,43 @@ def inline_formset(request):
                 messages.success(request, 'Invoice created successfully.')
                 return HttpResponseRedirect(reverse('invoices:invoice-list'))
     else:
-        invoice_form = InvoiceForm(instance=invoice)
+        invoice_form = InvoiceForm(instance=invoice, userid=user.id)
         formset = InlineElementFormset()
     return render(request, 'invoices/testinlineform.html', {
         'invoice_form': invoice_form,
-        'formset': formset
+        'formset': formset,
+        'user_clients': user_clients
         })
 
 # invoice update view
 
 def update_formset(request, id):
+    user = request.user
     invoice = Invoice.objects.get(id=id)
     elements = invoice.elements.all()
     invoice_form = InvoiceForm(instance=invoice)
     if request.method == 'POST':
-        invoice_form = InvoiceForm(request.POST, instance=invoice)
-        formset = InlineElementFormset(request.POST, instance=invoice)
+        invoice_form = InvoiceForm(request.POST, instance=invoice, userid=user.id)
+        formset = InlineElementFormsetUpdate(request.POST, instance=invoice)
         if invoice_form.is_valid():
-            created_invoice = invoice_form.save(commit=False)
-            formset = InlineElementFormset(request.POST, instance=created_invoice)
+            print('invoice is valid')
+            created_invoice = invoice_form.save()
+            formset = InlineElementFormsetUpdate(request.POST, instance=created_invoice)
+            # print(formset)
             if formset.is_valid():
+                print('Elements are valid')
                 print(formset.cleaned_data)
-                print(invoice_form.cleaned_data)
+                # print(invoice_form.cleaned_data)
                 created_invoice.save()
                 formset.save()
+                messages.success(request, 'Invoice updated correctly!')
                 return HttpResponseRedirect(reverse('invoices:invoice-list'))
+            # else:
+            #     print(formset.errors)
+            #     return HttpResponseRedirect(reverse('invoices:invoice-list'))
     else:
-        invoice_form = InvoiceForm(instance=invoice)
-        formset = InlineElementFormset(instance=invoice)
+        invoice_form = InvoiceForm(instance=invoice, userid=user.id)
+        formset = InlineElementFormsetUpdate(instance=invoice)
     return render(request, 'invoices/testinlineform_update.html', {
         'invoice_form': invoice_form,
         'formset': formset
@@ -108,7 +118,7 @@ def update_formset(request, id):
 
 class InvoiceDelete(DeleteView):
     model = Invoice
-    success_url = reverse_lazy('invoice-list')
+    success_url = reverse_lazy('invoices:invoice-list')
 
 def error_404_view(request, exception):
     return render(request,'invoices/404.html')

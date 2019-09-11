@@ -1,0 +1,30 @@
+{% extends "../index.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <h2 class="edit_header">Hello {{ current_user.username }}!</h2>
+    <h4 class="edit_subheader">Here you can edit your account details</h4>
+    <br>
+    <hr>
+    <form method="post" enctype="multipart/form-data" action="">{% csrf_token %}
+    {{ form|crispy }}
+    {{ additional_info.address|as_crispy_field }}
+    {{ additional_info.city|as_crispy_field }}
+    {{ additional_info.country|as_crispy_field }}
+    {{ additional_info.taxCode|as_crispy_field }}
+    {% if additional_info.personal_picture is None %}
+    <p>Company logo not set</p>
+    {% else %}
+    <p>Company Logo</p>
+    <img class="personal_picture" src="{{ additional_info.instance.personal_picture.url }}" />
+    {{ additional_info.personal_picture|as_crispy_field }}
+    {% endif %}
+    <br>
+    <br>
+    <input class="btn btn-primary" type="submit" value="Update">
+    <input type="hidden" name="next" value="{{ next }}">
+    </form>
+    <br>
+    <div><a class="btn btn-danger" href="{% url 'change_password' %}">Change Password</a></div>
+{% endblock %}

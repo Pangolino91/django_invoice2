@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'invoices',
     'clients',
     'crispy_forms',
-    'rest_framework'
+    'rest_framework',
+    'extendedusers'
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
@@ -153,9 +158,12 @@ LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = '/invoices/list'
 
+LOGIN_IF_REGISTERED = '/myprofile'
+
 # logout redirect
 
 LOGOUT_REDIRECT_URL = '/'
 
 # installing pipenv in same folder
 # PIPENV_VENV_IN_PROJECT=True
+

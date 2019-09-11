@@ -8,35 +8,141 @@
     {% comment %} {{ invoice_form|crispy }} {% endcomment %}
     <div class="row">
         <div class="col-6">
-            {{ invoice_form.clientName|as_crispy_field }}
+            {{ invoice_form.client|as_crispy_field }}
         </div>
     </div>
     <h2>Elements</h2>
-    {{ formset|crispy }}
-    <div class="gallery"></div>
-    <div style="display: none" id="inline-additional">
-        {{ formset.empty_form|crispy }}
+    {{ formset.management_form }}
+    <div class="container">
+    {% for form in formset  %}
+    <div class="form-row row">
+        <div class="col-6">
+            {{ form.name|as_crispy_field }}
+        </div>
+        <div class="col-6">
+            {{ form.price|as_crispy_field }}
+            <div class="remove-container">
+            <button class="btn btn-danger remove-form-row">Remove
+            {{ form.DELETE }}
+            </button>
+            </div>
+            {{ form.id }}
+        </div>
     </div>
-    <button class="btn btn-success add-element">Add Additional Form</button><br><br>
+    {% endfor %}
+    </div>
+    <button class="btn btn-success add-form-row">Add Additional Form</button>
+    <div>
+        <h3>Total: <span class="totalPrice"></span></h3>
+    </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
     </form>
 {% endblock %}
 
 {% block scripts %}
 <script defer>
     $(document).ready(function () {
-        // this is to add multiple forms for elements 
-        $('.add-element').click(function(ev){
-            ev.preventDefault();
-            var count = parseInt($('#id_element_set-TOTAL_FORMS').attr('value'), 10);
-            // console.log(count)
-            var tmplMarkup = $('#inline-additional').html();
-            console.log(tmplMarkup);
-            // console.log('hello')
-            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count)
-            console.log(compiledTmpl);
-            $('div.gallery').append(compiledTmpl);
-            $('#id_element_set-TOTAL_FORMS').attr('value', count + 1);
+        // this is to add multiple forms for elements
+        function updateElementIndex(el, prefix, ndx) {
+            var id_regex = new RegExp('(' + prefix + '-\\d+)');
+            var replacement = prefix + '-' + ndx;
+            if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+            if (el.id) el.id = el.id.replace(id_regex, replacement);
+            if (el.name) el.name = el.name.replace(id_regex, replacement);
+        }
+        function cloneMore(selector, prefix) {
+        var newElement = $(selector).clone(true).show();
+        newElement.find('input[type=checkbox]').prop('checked', false);
+        // console.log($('.form-row'))
+        var newElemtoCons = $(selector).find(':input:not([type=button]):not([type=submit]):not([type=reset]):not(".add-element")').each(function() {
+            //console.log($(this))
+        })
+        // console.log(newElemtoCons)
+        var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        //console.log(total)
+        newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset]):not(".remove-form-row")').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newElement.find('label').each(function() {
+            var forValue = $(this).attr('for');
+            if (forValue) {
+            forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+            $(this).attr({'for': forValue});
+            }
+        });
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+        var conditionRow = $('.form-row:not(:last)');
+        conditionRow.find('.btn.add-form-row')
+        .removeClass('btn-success').addClass('btn-danger')
+        .removeClass('add-form-row').addClass('remove-form-row')
+        .html('<span class="glyphicon glyphicon-minus" aria-hidden="true">Remove</span>');
+        return false;
+        }
+        // FUNCTION TO DELETE THE SINGLE ELEMENT FORM
+        function deleteForm(prefix, btn) {
+            var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+            if (total > 1){
+                console.log(btn)
+                btn.closest('.form-row').hide();
+                // console.log($('.remove-container').closest('input[type=checkbox]').prop('checked', true))
+                btn.children('input[type=checkbox]').prop('checked', true);
+                var forms = $('.form-row');
+                $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+                for (var i=0, formCount=forms.length; i<formCount; i++) {
+                    $(forms.get(i)).find(':input').each(function() {
+                        updateElementIndex(this, prefix, i);
+                    });
+                }
+            }
+            return false;
+        }
+        $(document).on('click', '.add-form-row', function(e){
+            // console.log($('#id_elements-0-price').val())
+            e.preventDefault();
+            // console.log($(this))
+            cloneMore('.form-row:last', 'elements');
+            var tot = 0;
+            currentTotal = $('.form-row').find('input[type=number]').each(function() {
+                if($(this).val() != ""){
+                    numberPrice = parseInt($(this).val());
+                    tot += numberPrice;
+                }
+            });
+            $('.totalPrice').text(`${tot} €`)
+            return false;
+        });
+        // remove SINGLE ELEMENT FORM
+        $(document).on('click', '.remove-form-row', function(e){
+            e.preventDefault();
+            var visibleForms = $('.form-row:visible').length
+            console.log(visibleForms)
+            if ($(this).children('#id_elements-0-DELETE').length > 0) {
+                alert('ccccc');
+                var tot = 0;
+                    currentTotal = $('.form-row').find('input[type=number]').each(function() {
+                    if($(this).val() != ""){
+                        numberPrice = parseInt($(this).val());
+                        tot += numberPrice;
+                    }
+                });
+            }
+            else {
+                    deleteForm('elements', $(this));
+                    var tot = 0;
+                    currentTotal = $('.form-row').find('input[type=number]').each(function() {
+                    if($(this).val() != ""){
+                        numberPrice = parseInt($(this).val());
+                        tot += numberPrice;
+                    }
+                });
+            }
+            $('.totalPrice').text(`${tot} €`)
+            return false;
         });
     });
 </script>

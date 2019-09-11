@@ -5,9 +5,13 @@
 <h1>Client List</h1>
 <div>
 {% for client in mylist  %}
-    <p>{{ client.name }}</p>
+    <p>{{ client.name }} {{ client.surname }}</p>
     <p>{{ client.address }}</p>
-    <p><b>Invoices with this client: {{ client.id }}</b></p>
+    <p><b>Invoices with this client: {{ client.user.invoices.count }}</b></p>
+    <div>
+        <a class="btn btn-info" href="{% url 'clients:single-client' client.id %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'clients:delete-client' client.id %}">Delete</a>
+    </div>
     <hr>
 {% endfor %}
 </div>
