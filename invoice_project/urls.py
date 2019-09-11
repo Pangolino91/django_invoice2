@@ -54,7 +54,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(extra_context={ 'message': 'you have successfully logged out'}), name="logout"),
     path('admin/', admin.site.urls),
     path('invoices/', include('invoices.urls')),
-    path('clients/', include('clients.urls', namespace='clients')),
+    path('clients/', include('clients.urls')),
     path('auth/', include('auth.urls')),
     # path('api/', include(router.urls))
 ]
