@@ -53,7 +53,7 @@ urlpatterns = [
     # path('login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name="login"),
     path('logout/', auth_views.LogoutView.as_view(extra_context={ 'message': 'you have successfully logged out'}), name="logout"),
     path('admin/', admin.site.urls),
-    path('invoices/', include('invoices.urls', namespace='invoices')),
+    path('invoices/', include('invoices.urls')),
     path('clients/', include('clients.urls', namespace='clients')),
     path('auth/', include('auth.urls')),
     # path('api/', include(router.urls))
