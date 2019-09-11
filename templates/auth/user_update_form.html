@@ -17,8 +17,11 @@
     <p>Company logo not set</p>
     {% else %}
     <p>Company Logo</p>
-    <img class="personal_picture" src="{{ additional_info.instance.personal_picture.url }}" />
-    {{ additional_info.personal_picture|as_crispy_field }}
+    {# yes You left out [dot]instance -> check it #}
+    {% with  additional_info.instance as profile %}
+        <img class="personal_picture" src="{%if profile.personal_picture %}{{ profile.personal_picture.url }}{%endif%}" />
+        {{ additional_info.personal_picture|as_crispy_field }}    
+    {% endwith %}
     {% endif %}
     <br>
     <br>

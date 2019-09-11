@@ -1,0 +1,3 @@
+Hi {{name}}. You've created an account with us. Use the following link to verify your account:
+
+Link : {{ link }}

@@ -15,6 +15,7 @@ from extendedusers.models import ExtendedUser
 from extendedusers.forms import ExtendedUserForm 
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 # Create your views here.
 
@@ -58,7 +59,7 @@ class UserCreation(View):
             return render(request, self.template_name, {'form':form, 'ext_user_form':extend_user_form})
         ## Here i should have some logic to redirect to different views depending on the `option`
 
-class UpdateCustomUser(UpdateView):
+class UpdateCustomUser(LoginRequiredMixin, UpdateView):
     model = User
     form_class = CustomUserUpdateForm
     additional_info_form = ExtendedUserForm
@@ -71,7 +72,7 @@ class UpdateCustomUser(UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["additional_info"] = self.additional_info_form(instance=self.request.user.extendeduser)
+        context["additional_info"] = self.additional_info_form(instance=self.request.user.profile)
         userId = self.request.user.id
         context["user_instance"] = User.objects.get(id=userId)
         return context
@@ -82,7 +83,7 @@ class UpdateCustomUser(UpdateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance=self.request.user)
-        extend_user_form = self.additional_info_form(request.POST, request.FILES, instance=self.request.user.extendeduser)
+        extend_user_form = self.additional_info_form(request.POST, request.FILES, instance=self.request.user.profile)
         if form.is_valid() and extend_user_form.is_valid():
             user = form.save()
             additional_info = extend_user_form.save(commit=False)

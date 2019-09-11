@@ -87,7 +87,7 @@
         function deleteForm(prefix, btn) {
             var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
             if (total > 1){
-                console.log(btn)
+                // console.log(btn)
                 btn.closest('.form-row').hide();
                 // console.log($('.remove-container').closest('input[type=checkbox]').prop('checked', true))
                 btn.children('input[type=checkbox]').prop('checked', true);
@@ -122,7 +122,7 @@
             var visibleForms = $('.form-row:visible').length
             console.log(visibleForms)
             if ($(this).children('#id_elements-0-DELETE').length > 0) {
-                alert('ccccc');
+                alert('Invoice needs to have at least one element!');
                 var tot = 0;
                     currentTotal = $('.form-row').find('input[type=number]').each(function() {
                     if($(this).val() != ""){

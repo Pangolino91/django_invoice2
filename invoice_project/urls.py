@@ -41,9 +41,9 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 # router = routers.DefaultRouter()
 # router.register('api-invoices', InvoiceViewSet)
 
-app_name = 'root_app'
 urlpatterns = [
     path('', views.index, name="index"),
+    path('ex-auth/', include('extendedusers.urls')),
     path('login/', views.CustomLoginView.as_view(), name="login"),
     # path('register/', views.user_creation, name="register"),
     path('register/', views.UserCreation.as_view(), name="register"),

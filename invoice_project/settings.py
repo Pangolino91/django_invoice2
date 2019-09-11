@@ -94,6 +94,7 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
+        'ATOMIC_REQUESTS': True,
     }
 }
 
@@ -167,3 +168,8 @@ LOGOUT_REDIRECT_URL = '/'
 # installing pipenv in same folder
 # PIPENV_VENV_IN_PROJECT=True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
