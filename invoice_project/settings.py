@@ -190,3 +190,8 @@ LOGOUT_REDIRECT_URL = '/'
 # PIPENV_VENV_IN_PROJECT=True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# mailhog
+
+EMAIL_HOST='localhost'
+EMAIL_PORT=1025
