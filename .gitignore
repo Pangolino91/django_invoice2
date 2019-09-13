@@ -1,0 +1,6 @@
+static/node_modules
+static/package-lock.json
+media
+invoice_project/base.py
+invoice_project/production.py
+invoice_project/settings.py

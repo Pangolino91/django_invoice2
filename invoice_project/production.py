@@ -3,7 +3,6 @@ from .base import *  # do the same for local
 ALLOWED_HOSTS =os.getenv("DJANGO_ALLOWED_HOSTS")
 SECRET_KEY=os.getenv("DJANGO_SECRET_KEY") # yes you will need to
 
-
 # so the most important thing you'll do in produciton is set where django reads the settings from...
 
 DATABASES = {
