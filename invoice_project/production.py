@@ -9,8 +9,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('DATABASE_NAME'),  # Set produciton settings
-        'USER': os.getenv("DATABSE_USER"),
-        'PASSWORD': os.getenv('DATABSE_PASSWORD'),
+        'USER': os.getenv("DATABASE_USER"),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': os.getenv("DATABASE_HOST"),   # Or an IP Address that your DB is hosted on
         'PORT': os.getenv("DATABASE_PORT"), # yes/yes
         'ATOMIC_REQUESTS': True, # yes/exactly
@@ -20,5 +20,10 @@ DATABASES = {
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-EMAIL_USER=os.getenv("EMAIL_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER=os.getenv("EMAIL_HOST_USER") #  Silly errors
+EMAIL_USE_TLS=False
+
+location /media  {
+    alias /home/enrico/django_invoice2/media;      # your Django project's media files
+}

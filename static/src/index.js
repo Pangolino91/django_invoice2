@@ -6,7 +6,7 @@ import 'bootstrap/dist/js/bootstrap.js'
 import 'startbootstrap-sb-admin-2/css/sb-admin-2.css'
 import 'startbootstrap-sb-admin-2/js/sb-admin-2.js'
 import './style.css'
-
+import './css/all.css'
 
 
 const managerGroups = groupBy(people, "manager")

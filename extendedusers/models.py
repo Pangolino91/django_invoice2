@@ -48,7 +48,7 @@ class VerificationTokens(models.Model):
 
     def send_token(self):
         subject = 'Verification Message'
-        from_email = 'sample@invoice.com'
+        from_email = 'enricotroll91@gmail.com'
         to_email = self.account.user.email
 
         # we'll be using reverse_lazy coz we're not using the url right away.
