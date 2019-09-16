@@ -1,6 +1,6 @@
 import uuid
 import logging
-
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse, reverse_lazy
@@ -10,14 +10,26 @@ from django.template import Context
 
 logger = logging.getLogger(__name__)
 
+
+# def RequestExposerMiddleware(get_response):
+#     def middleware(request):
+#         models.exposed_request = request
+#         response = get_response(request)
+#         return response
+
+#     return middleware
+
+
 class ExtendedUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    companyName = models.CharField(max_length=150, blank=True)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     taxCode = models.CharField(max_length=100)
     personal_picture = models.ImageField(upload_to="images/", blank=True)
     verified = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.user.username
@@ -53,19 +65,23 @@ class VerificationTokens(models.Model):
 
         # we'll be using reverse_lazy coz we're not using the url right away.
         link = reverse_lazy('extended_users:verify', kwargs={
-            'token_uuid': self.token, 'user_email': to_email,
+            'token_uuid': self.token,
+            'user_email': to_email,
         })
 
         context_data = {
             'name':  self.account.user.get_full_name(),
             'link': link,
+            'base_dir': settings.BASE_DIR
         }
-        plain_text = get_template('auth/verify.txt')
+        
+        plain_text = get_template('auth/verify.html')
         text_content = plain_text.render(context_data)
 
         # print(str(text_content))
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(text_content, "text/html")
         msg.send()
 
 
@@ -75,19 +91,17 @@ class VerificationTokens(models.Model):
         # Its okay, we can use Mailhog, you know it?
         # Okay, so just download it, and we'll set thing up!
 
-
-        
-
         # So now we just want to test if its sending mails be4 we proceed
         # you can run your migrations now
         # yes
         send_token = False
+        # prev_tokens = self.account.tokens
+        # if self.account.tokens.count() < 1:
         if not self.pk:
+            print(self.id)
             # I did this so that the token doesnt get send everytime the data is edited  since save is called on update and initial save. So django only gives a Model instance a `pk` after it is saved in the database, so if it doesnt have it, then its a new record.
             # yes
-
             send_token = True
-
         super().save(*args, **kwargs)
 
         if send_token:

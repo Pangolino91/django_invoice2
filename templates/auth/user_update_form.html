@@ -9,6 +9,7 @@
     <hr>
     <form method="post" enctype="multipart/form-data" action="">{% csrf_token %}
     {{ form|crispy }}
+    {{ additional_info.companyName|as_crispy_field }}
     {{ additional_info.address|as_crispy_field }}
     {{ additional_info.city|as_crispy_field }}
     {{ additional_info.country|as_crispy_field }}

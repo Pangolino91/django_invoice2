@@ -32,4 +32,12 @@ pre {
 .form-row input[type=checkbox] {
   visibility: hidden;
 }
+
+.messages {
+  padding-left: 0 !important;
+}
+
+.add-form-row, .notes-row {
+  margin-left: 22px;
+}
 /*# sourceMappingURL=style.css.map */

@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
 # from django_weasyprint import CONTENT_TYPE_PNG, WeasyTemplateResponseMixin
 from xhtml2pdf import pisa
+from invoice_project.utils import VerificationRequiredMixin, verification_required
 
 # to create  pdf
 import io
@@ -21,7 +22,7 @@ from reportlab.pdfgen import canvas
 
 # Invoices List view
 
-class InvoiceList(ListView):
+class InvoiceList(VerificationRequiredMixin, ListView):
     model = Invoice
     ordering = ['date']
     paginate_by = 10
@@ -38,7 +39,7 @@ class InvoiceList(ListView):
 
 # Single invoice View
 
-class InvoiceDetailView(DetailView):
+class InvoiceDetailView(VerificationRequiredMixin, DetailView):
 
     model = Invoice
 
@@ -47,11 +48,10 @@ class InvoiceDetailView(DetailView):
         context["users"] = User.objects.all()
         return context
     
-    
-    
-
 # create new invoice and related elements
 
+
+@verification_required
 def inline_formset(request):
     invoice = Invoice()
     user = request.user
@@ -73,6 +73,8 @@ def inline_formset(request):
                 messages.success(request, 'Invoice created successfully.')
                 return HttpResponseRedirect(reverse('invoices:invoice-list'))
     else:
+        if not user.clients.all():
+            messages.info(request, 'You need to create at least one client before creating invoices')
         invoice_form = InvoiceForm(instance=invoice, userid=user.id)
         formset = InlineElementFormset()
     return render(request, 'invoices/testinlineform.html', {
@@ -82,7 +84,7 @@ def inline_formset(request):
         })
 
 # invoice update view
-
+@verification_required
 def update_formset(request, id):
     user = request.user
     invoice = Invoice.objects.get(id=id)
@@ -116,7 +118,7 @@ def update_formset(request, id):
         })
 
 
-class InvoiceDelete(DeleteView):
+class InvoiceDelete(VerificationRequiredMixin, DeleteView):
     model = Invoice
     success_url = reverse_lazy('invoices:invoice-list')
 
@@ -161,7 +163,7 @@ def error_404_view(request, exception):
 
 
 
-# @staff_member_required
+@verification_required
 def test_pdf(request, id=None):
     invoice = get_object_or_404(Invoice, id=id)
     # Create the HttpResponse object with the appropriate PDF headers.

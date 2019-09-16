@@ -9,13 +9,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib import messages
 from django.views.generic.list import ListView
+from invoice_project.utils import verification_required, VerificationRequiredMixin
 # from .urls import *
 
 # Create your views here.
 
-class ClientCreate(CreateView):
+class ClientCreate(VerificationRequiredMixin, CreateView):
     model = Client
-    fields = ['name', 'surname', 'address', 'city', 'country', 'taxCode']
+    fields = ['name', 'surname', 'companyName', 'address', 'city', 'country', 'taxCode']
     template_name = 'clients/add.html'
     success_url = reverse_lazy("clients:list-client")
     #  begin experiment
@@ -37,7 +38,7 @@ class ClientCreate(CreateView):
         self.object = form.save()
         return super().form_valid(form)
 
-class ClientDelete(DeleteView):
+class ClientDelete(VerificationRequiredMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('clients:list-client')
     template_name = 'clients/delete.html'
@@ -48,9 +49,9 @@ class ClientDelete(DeleteView):
         # print(self.request.user)
         return super().post(request, *args, **kwargs)
         
-class ClientDetail(UpdateView):
+class ClientDetail(VerificationRequiredMixin, UpdateView):
     model = Client
-    fields = ['name', 'surname', 'address', 'city', 'country', 'taxCode']
+    fields = ['name', 'surname', 'companyName', 'address', 'city', 'country', 'taxCode']
     template_name = "clients/single.html"
     context_object_name = 'client'
     success_url = reverse_lazy("clients:list-client")
@@ -86,7 +87,7 @@ class ClientDetail(UpdateView):
     # def get(self, request, *args, **kwargs):
     #     return render(request, self.template_name, {'ciao': self.get_object()})
 
-class ClientList(ListView):
+class ClientList(VerificationRequiredMixin, ListView):
     model = Client
     template_name = 'clients/list.html'
     context_object_name = "mylist"

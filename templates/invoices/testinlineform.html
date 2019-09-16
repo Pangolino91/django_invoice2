@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+{{ value|linebreaks }}
 <h1>New Invoice</h1>
     <form action="" method="post">{% csrf_token %}
     <div class="row">
@@ -19,9 +20,14 @@
     </div>
     <div class="col-6">
         {{ form.price|as_crispy_field }}
-        <button class="btn btn-success add-form-row">Add Additional Form</button><br><br>
+        <button class="btn btn-success add-form-row">Add Additional Element</button><br><br>
     </div>
     {% endfor %}
+    </div>
+    <div class="notes-row">
+        <div class="col-8">
+            {{ invoice_form.additional_notes|as_crispy_field }}
+        </div>
     </div>
     <div>
         <h3>Total: <span class="totalPrice"></span></h3>

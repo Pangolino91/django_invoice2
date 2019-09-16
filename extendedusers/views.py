@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
-
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 
 from .models import ExtendedUser
 
@@ -28,7 +28,8 @@ class VerifyAccount(generic.View):
                 # token exists | we'll need to make 1to1, but i'll leave it for now
                 if profile.tokens.filter(token=token_uuid).exists():
                     profile.set_verified()
-                    return HttpResponse("Account verified!")
+                    messages.success(request, 'Account was verified correctly! Now you can start using the application')
+                    return HttpResponseRedirect(reverse('index'))
                 else:
                     return HttpResponse("Token invalid")
             else:

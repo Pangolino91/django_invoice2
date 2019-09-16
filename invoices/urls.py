@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 app_name = 'invoices'
 urlpatterns = [
-    path('list/', login_required(views.InvoiceList.as_view()), name='invoice-list'),
+    path('list/', views.InvoiceList.as_view(), name='invoice-list'),
     path('<int:pk>/', login_required(InvoiceDetailView.as_view()), name='single-invoice'),
     path('add/', login_required(views.inline_formset), name="add-elements"),
     path('<int:id>/update', login_required(views.update_formset), name="update-element"),

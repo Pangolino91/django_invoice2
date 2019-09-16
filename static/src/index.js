@@ -1,11 +1,9 @@
 import $ from "jquery"
 import { groupBy } from "lodash-es"
 import people from "./people"
-import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
 import 'startbootstrap-sb-admin-2/css/sb-admin-2.css'
 import 'startbootstrap-sb-admin-2/js/sb-admin-2.js'
-import './style.css'
 import './css/all.css'
 
 

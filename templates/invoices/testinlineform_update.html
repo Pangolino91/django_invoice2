@@ -31,7 +31,12 @@
     </div>
     {% endfor %}
     </div>
-    <button class="btn btn-success add-form-row">Add Additional Form</button>
+    <button class="btn btn-success add-form-row">Add Additional Element</button>
+    <div class="notes-row">
+        <div class="col-8">
+            {{ invoice_form.additional_notes|as_crispy_field }}
+        </div>
+    </div>
     <div>
         <h3>Total: <span class="totalPrice"></span></h3>
     </div>

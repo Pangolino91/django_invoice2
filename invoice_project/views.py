@@ -67,6 +67,11 @@ class UpdateCustomUser(LoginRequiredMixin, UpdateView):
     context_object_name = 'current_user'
     success_url = reverse_lazy('myprofile')
 
+    def get(self, request, *args, **kwargs):
+        if not self.request.user.profile.verified:
+            messages.info(request, 'This account is not verified. Please check your email and follow the link provided for the verification.')
+        return super().get(self, request, *args, **kwargs)
+
     def get_object(self, queryset=None):
         return self.request.user
     

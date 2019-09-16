@@ -1,0 +1,8 @@
+<h2>Welcome to Simple Invoice App</h2>
+<p>Hi {{name}}. You've created an account with us. Use the following link to verify your account:</p>
+<p><b>Verification Link:</b></p>
+{% if base_dir|first in 'C:' %}
+<a href="http://localhost:8000{{ link }}">http://localhost:8000{{ link }}</a>
+{% else %}
+<a href="{{ base_dir|add:link }}">{{ base_dir|add:link }}</a>
+{% endif %}

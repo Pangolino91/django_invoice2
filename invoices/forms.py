@@ -5,12 +5,15 @@ from django.forms import inlineformset_factory, formset_factory, modelformset_fa
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ['client']
+        fields = ['client', 'additional_notes']
 
     def __init__(self, *args, **kwargs):
         userid = kwargs.pop('userid', None)
         super().__init__(*args, **kwargs)
-        self.fields['client'] = forms.ModelChoiceField(queryset=Client.objects.filter(user_id=userid))
+        self.fields['client'] = forms.ModelChoiceField(
+            queryset=Client.objects.filter(user_id=userid),
+            empty_label='-- Select a client --'
+            )
         
     def clean(self):
         super().clean()

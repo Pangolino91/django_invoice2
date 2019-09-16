@@ -24,6 +24,7 @@ class Invoice(models.Model):
     
     date = models.DateField(auto_now_add=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='clients')
+    additional_notes = models.TextField(max_length=700, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
 
     def clean(self):

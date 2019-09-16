@@ -1,4 +1,7 @@
 $bluegrey: #2b3a42;
+@mixin adjusted-left-margin {
+    margin-left: 22px;
+}
 
 pre {
 padding: 8px 16px;
@@ -33,4 +36,12 @@ border-radius: 3px;
 
 .form-row input[type=checkbox] {
     visibility: hidden
+}
+
+.messages {
+    padding-left: 0 !important;
+}
+
+.add-form-row, .notes-row  {
+    @include adjusted-left-margin;
 }

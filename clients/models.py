@@ -17,6 +17,7 @@ class Client(models.Model):
 
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
+    companyName = models.CharField(max_length=150, blank=True)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)

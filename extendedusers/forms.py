@@ -6,7 +6,7 @@ from django import forms
 class ExtendedUserForm(ModelForm):
     class Meta:
         model = ExtendedUser
-        fields = ['address', 'city', 'country', 'taxCode', 'personal_picture']
+        fields = ['companyName', 'address', 'city', 'country', 'taxCode', 'personal_picture']
     personal_picture = forms.ImageField(label='Update company logo', required=False, error_messages = {'invalid': "Image files only"}, widget=forms.FileInput)
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
