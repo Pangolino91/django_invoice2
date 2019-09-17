@@ -96,8 +96,8 @@ class VerificationTokens(models.Model):
         # yes
         send_token = False
         # prev_tokens = self.account.tokens
-        if self.account.tokens.count() < 1:
         # if not self.pk:
+        if self.account.tokens.count() < 1:
             print(self.id)
             # I did this so that the token doesnt get send everytime the data is edited  since save is called on update and initial save. So django only gives a Model instance a `pk` after it is saved in the database, so if it doesnt have it, then its a new record.
             # yes

@@ -1,5 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 from django import forms
 from django.db import models
 
@@ -8,6 +10,13 @@ from django.db import models
 class CustomUserForm(UserCreationForm):
     email = models.EmailField(max_length=200, help_text='Required')
     first_name = models.CharField(max_length=200)
+
+    def clean(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            self.add_error('email', 'A user with this email address already exists. Please choose another one.')
+            return self.cleaned_data
+        return super().clean()
 
     def save(self, commit=True):
         user = super(CustomUserForm, self).save(commit=False)

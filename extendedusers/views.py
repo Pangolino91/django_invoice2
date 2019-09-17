@@ -29,7 +29,8 @@ class VerifyAccount(generic.View):
                 if profile.tokens.filter(token=token_uuid).exists():
                     profile.set_verified()
                     messages.success(request, 'Account was verified correctly! Now you can start using the application')
-                    return HttpResponseRedirect(reverse('index'))
+                    # return HttpResponseRedirect(reverse('index'))
+                    return HttpResponse('cool, worked')
                 else:
                     return HttpResponse("Token invalid")
             else:
