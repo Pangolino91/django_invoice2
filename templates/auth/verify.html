@@ -1,8 +1,8 @@
-<h2>Welcome to Simple Invoice App</h2>
-<p>Hi {{name}}. You've created an account with us. Use the following link to verify your account:</p>
-<p><b>Verification Link:</b></p>
+<h2 style="font-family: helvetica;">Welcome to Simple Invoice App</h2>
+<p style="font-family: helvetica;">Hi {{name}}. You've created an account with us. Use the following link to verify your account:</p>
+<p style="font-family: helvetica;"><b>Verification Link:</b></p>
 {% if base_dir|first in 'C:' %}
-<a href="http://localhost:8000{{ link }}">http://localhost:8000{{ link }}</a>
+<a style="font-family: helvetica;" href="http://localhost:8000{{ link }}">http://localhost:8000{{ link }}</a>
 {% else %}
-<a href="http://invoice.coderune.com{{ link }}">http://invoice.coderune.com{{ link }}</a>
+<a style="font-family: helvetica;" href="http://invoice.coderune.com{{ link }}">http://invoice.coderune.com{{ link }}</a>
 {% endif %}

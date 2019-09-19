@@ -11,7 +11,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from django.contrib.messages import constants as messages
 # from django.conf import global_settings
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
 
 # # TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 # 'plans.context_processors.account_status'
